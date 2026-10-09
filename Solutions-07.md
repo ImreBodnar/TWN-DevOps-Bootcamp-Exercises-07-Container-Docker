@@ -91,6 +91,13 @@ docker run -p 8081:80 \
 
 ## Exercise 3
 
+**At first I had to install docker-compose:**
+
+```bash
+sudo apt install docker-compose-v2
+docker compose version
+```
+
 **The content of a docker compose file to run both containers:**
 
 ```yaml
@@ -126,7 +133,7 @@ volumes:
 **I used this command to run my docker compose:**
 
 ```bash
-docker-compose -f ./docker-compose.yaml up -d
+docker compose -f ./docker-compose.yaml up -d
 ```
 
 **The PhpMyAdmin UI after I created and restarted my docker compose:**
