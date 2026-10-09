@@ -123,7 +123,13 @@ volumes:
   mysql_data:
 ```
 
+**I used this command to run my docker compose:**
+
+```bash
+docker-compose -f ./docker-compose.yaml up -d
+```
+
 **The PhpMyAdmin UI after I created and restarted my docker compose:**
-**(Before the restart I created a table with one row.)**
+**(Before the restart I created a table with one row as you can see in the picture.)**
 
 ![PhpMyAdmin after i created and restarted my docker compose.](Exercise-3-Compose-After-Created-and-Restarted.jpg)
