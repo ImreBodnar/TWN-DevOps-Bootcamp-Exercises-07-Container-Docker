@@ -1,0 +1,27 @@
+version: "3.9"
+name: twn-dc
+
+services:
+  mysql.db:
+    image: mysql:26.7
+    container_name: twn-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=1q2w3e4r
+      - MYSQL_DATABASE=twn-db
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=q1w2e3r4
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  phpmyadmin.ui:
+    image: phpmyadmin:5.2.3
+    container_name: twn-phpmyadmin
+    environment:
+      - PMA_HOST=twn-mysql
+    ports:
+      - 8081:80
+
+volumes:
+  mysql_data:

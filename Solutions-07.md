@@ -88,3 +88,42 @@ docker run -p 8081:80 \
 **I successfully logged in to the PHPMyAdmin UI:**
 
 ![Successful log in to the phpmyadmin ui.](Exercise-2-Succesful-Login-into-UI.jpg)
+
+## Exercise 3
+
+**The content of a docker compose file to run both containers:**
+
+```yaml
+version: "3.9"
+name: twn-dc
+
+services:
+  mysql.db:
+    image: mysql:26.7
+    container_name: twn-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=1q2w3e4r
+      - MYSQL_DATABASE=twn-db
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=q1w2e3r4
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  phpmyadmin.ui:
+    image: phpmyadmin:5.2.3
+    container_name: twn-phpmyadmin
+    environment:
+      - PMA_HOST=twn-mysql
+    ports:
+      - 8081:80
+
+volumes:
+  mysql_data:
+```
+
+**The PhpMyAdmin UI after I created and restarted my docker compose:**
+**(Before the restart I created a table with one row.)**
+
+![PhpMyAdmin after i created and restarted my docker compose.](Exercise-3-Compose-After-Created-and-Restarted.jpg)
