@@ -52,6 +52,8 @@ docker run -p 3306:3306 \
 -d mysql:26.7
 ```
 
+> I used intentionally a fixed version for MySQL instead of the latest tag.
+
 **Export the neccessary environment variables, build and run the app:**
 
 ```bash
@@ -69,3 +71,20 @@ java -jar build/libs/docker-exercises-project-1.0-SNAPSHOT.jar
 **Result of build and run:**
 
 ![Build and run the app.](Exercise-1-Build-and-Run-the-App.jpg)
+
+## Exercise 2
+
+**Let's run a PHPMyAdmin container:**
+
+```bash
+docker run -p 8081:80 \
+--name twn-phpmyadmin \
+--link twn-mysql:db \
+-d phpmyadmin:5.2.3
+```
+
+> I used intentionally a fixed version for PHPMyAdmin instead of the latest tag.
+
+**I successfully logged in to the PHPMyAdmin UI:**
+
+![Successful log in to the phpmyadmin ui.](Exercise-2-Succesful-Login-into-UI.jpg)
