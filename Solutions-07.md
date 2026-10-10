@@ -140,3 +140,20 @@ docker compose -f ./docker-compose.yaml up -d
 **(Before the restart I created a table with one row as you can see in the picture.)**
 
 ![PhpMyAdmin after i created and restarted my docker compose.](Exercise-3-Compose-After-Created-and-Restarted.jpg)
+
+## Exercise 4
+
+**I added Dockerfile to the project:**
+
+```yaml
+FROM openjdk:17.0.2-jdk
+
+RUN mkdir app
+WORKDIR /app
+
+COPY build/libs/docker-exercises-project-1.0-SNAPSHOT.jar myapp.jar
+
+EXPOSE 8080
+
+CMD ["java","-jar","myapp.jar"]
+```
