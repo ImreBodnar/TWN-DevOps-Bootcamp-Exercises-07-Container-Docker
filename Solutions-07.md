@@ -157,3 +157,45 @@ EXPOSE 8080
 
 CMD ["java","-jar","myapp.jar"]
 ```
+
+## Exercise 5
+
+**At first I created a Docker hosted repository for my Docker images:**
+
+![The new docker hosted repository.](Exercise-5-1-The-New-Hosted-Docker-Repository.jpg)
+
+**I used these commands for the tasks:**
+
+```bash
+gradle build
+
+docker build -t my-java-app:latest .
+docker tag my-java-app:latest NEXUS_ADDRESS:8082/my-java-app:latest
+```
+
+**I created /etc/docker/daemon.json file which contains these lines:**
+
+```json
+{
+    "insecure-registries": ["NEXUS_ADDRESS:8082"]
+}
+```
+
+**After that I restarted Docker:**
+
+```bash
+sudo systemctl restart docker
+```
+
+**I had to add a new inbound rule to my DigitalOcean Droplet firewall to grant access (TCP 8082).**
+**And finally, login and push:**
+
+```bash
+docker login NEXUS_ADDRESS:8082
+
+docker push NEXUS_ADDRESS:8082/my-java-app:latest
+```
+
+**The pushed Docker Image:**
+
+![The pushed docker image.](Exercise-5-2-The-Pushed-Docker-Image.jpg)
