@@ -199,3 +199,79 @@ docker push NEXUS_ADDRESS:8082/my-java-app:latest
 **The pushed Docker Image:**
 
 ![The pushed docker image.](Exercise-5-2-The-Pushed-Docker-Image.jpg)
+
+## Exercise 6
+
+**At first let's set some environment variables:**
+
+```bash
+# MySQL related variables
+export MYSQL_ROOT_PASSWORD=********
+export DB_USER=********
+export DB_PWD=********
+export DB_SERVER=mysql.db
+export DB_NAME=twn-db
+
+# Nexus related variables
+export NEXUS_USER=********
+export NEXUS_PWD=********
+export NEXUS_ADDRESS=xxx.xxx.xxx.xxx:8082
+
+echo $NEXUS_PWD | docker login -u $NEXUS_USER --password-stdin $NEXUS_ADDRESS
+
+docker compose -f docker-compose.yaml up
+```
+
+**This is the updated docker-compose.yaml:**
+
+```yaml
+version: "3.9"
+name: twn-dc
+
+services:
+  mysql.db:
+    image: mysql:26.7
+    container_name: twn-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PWD}
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  phpmyadmin.ui:
+    image: phpmyadmin:5.2.3
+    container_name: twn-phpmyadmin
+    environment:
+      - PMA_HOST=${DB_SERVER}
+    ports:
+      - 8081:80
+    depends_on:
+      - mysql.db
+
+  my-java-app:
+    image: xxx.xxx.xxx.xxx:8082/my-java-app:latest
+    container_name: twn-java-app
+    environment:
+      - DB_USER=${DB_USER}
+      - DB_PWD=${DB_PWD}
+      - DB_SERVER=${DB_SERVER}
+      - DB_NAME=${DB_NAME}
+    ports:
+      - 8080:8080
+    depends_on:
+      mysql.db:
+        condition: service_healthy
+
+volumes:
+  mysql_data:
+```

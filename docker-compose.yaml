@@ -6,22 +6,44 @@ services:
     image: mysql:26.7
     container_name: twn-mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=1q2w3e4r
-      - MYSQL_DATABASE=twn-db
-      - MYSQL_USER=admin
-      - MYSQL_PASSWORD=q1w2e3r4
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PWD}
     ports:
       - 3306:3306
     volumes:
       - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
   phpmyadmin.ui:
     image: phpmyadmin:5.2.3
     container_name: twn-phpmyadmin
     environment:
-      - PMA_HOST=twn-mysql
+      - PMA_HOST=${DB_SERVER}
     ports:
       - 8081:80
+    depends_on:
+      - mysql.db
+
+  my-java-app:
+    image: xxx.xxx.xxx.xxx:8082/my-java-app:latest
+    container_name: twn-java-app
+    environment:
+      - DB_USER=${DB_USER}
+      - DB_PWD=${DB_PWD}
+      - DB_SERVER=${DB_SERVER}
+      - DB_NAME=${DB_NAME}
+    ports:
+      - 8080:8080
+    depends_on:
+      mysql.db:
+        condition: service_healthy
 
 volumes:
   mysql_data:
