@@ -279,13 +279,44 @@ volumes:
 ## Exercise 7
 
 **At first I updated line 48 in index.html.**
+**After that I used these commands:**
+
+> Important! To run my newly build container in docker-compose I used my Jenkins server droplet.
 
 ```bash
 gradle build
 
-docker build -t my-java-app:1.1 .
-docker tag my-java-app:1.1 161.35.197.245:8082/my-java-app:1.1
+docker build -t my-java-app:1.11 .
+docker tag my-java-app:1.1 NEXUS_ADDRESS:8082/my-java-app:1.11
 
-docker login 161.35.197.245:8082
-docker push 161.35.197.245:8082/my-java-app:1.1
+docker login NEXUS_ADDRESS:8082
+docker push NEXUS_ADDRESS:8082/my-java-app:1.11
+
+scp -i ~/.ssh/digital_ocean_key docker-compose.yaml root@JENKINS_ADDRESS:/root/
+
+ssh -i ~/.ssh/digital_ocean_key root@JENKINS_ADDRESS
+
+# I had to instal docker-compose first.
+apt install docker-compose-v2
+
+# I updated the "insecure-registries" line.
+nano /etc/docker/daemon.json
+service docker restart
+docker info
+
+# MySQL related variables
+export MYSQL_ROOT_PASSWORD=********
+export DB_USER=********
+export DB_PWD=********
+export DB_SERVER=mysql.db
+export DB_NAME=twn-db
+
+# Nexus related variables
+export NEXUS_USER=********
+export NEXUS_PWD=********
+export NEXUS_ADDRESS=xxx.xxx.xxx.xxx:8082
+
+echo $NEXUS_PWD | docker login -u $NEXUS_USER --password-stdin $NEXUS_ADDRESS
+
+docker compose -f docker-compose.yaml up
 ```
