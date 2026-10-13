@@ -32,7 +32,7 @@ services:
       - mysql.db
 
   my-java-app:
-    image: xxx.xxx.xxx.xxx:8082/my-java-app:latest
+    image: 161.35.197.245:8082/my-java-app:1.1
     container_name: twn-java-app
     environment:
       - DB_USER=${DB_USER}

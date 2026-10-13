@@ -275,3 +275,17 @@ services:
 volumes:
   mysql_data:
 ```
+
+## Exercise 7
+
+**At first I updated line 48 in index.html.**
+
+```bash
+gradle build
+
+docker build -t my-java-app:1.1 .
+docker tag my-java-app:1.1 161.35.197.245:8082/my-java-app:1.1
+
+docker login 161.35.197.245:8082
+docker push 161.35.197.245:8082/my-java-app:1.1
+```
