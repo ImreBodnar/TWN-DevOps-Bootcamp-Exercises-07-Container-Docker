@@ -45,10 +45,10 @@
 <script>
   // HOST must be the server IP or DNS name when app running on a server
   // and localhost when running locally
-  const HOST = "localhost";
+  const HOST = "167.172.184.106";
   
   (async function init() {
-    const response = await fetch(`http://167.172.184.106:8080/get-data`);
+    const response = await fetch(`http://${HOST}:8080/get-data`);
     console.log("response", response);
     const data = await response.json();
     console.log("stringified data: " + JSON.stringify(data));
