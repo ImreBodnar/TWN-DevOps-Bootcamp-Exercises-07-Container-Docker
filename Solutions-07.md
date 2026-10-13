@@ -278,45 +278,66 @@ volumes:
 
 ## Exercise 7
 
+> Important! To run my newly built container in docker-compose I used my Jenkins server droplet.
+
 **At first I updated line 48 in index.html.**
+
 **After that I used these commands:**
 
-> Important! To run my newly build container in docker-compose I used my Jenkins server droplet.
-
 ```bash
+# Gradle build, Docker build and tag.
 gradle build
 
 docker build -t my-java-app:1.11 .
 docker tag my-java-app:1.1 NEXUS_ADDRESS:8082/my-java-app:1.11
 
+# Login and push to Nexus.
 docker login NEXUS_ADDRESS:8082
 docker push NEXUS_ADDRESS:8082/my-java-app:1.11
 
+# Copy compose file to my droplet.
 scp -i ~/.ssh/digital_ocean_key docker-compose.yaml root@JENKINS_ADDRESS:/root/
 
+# Login to my Jenkins droplet.
 ssh -i ~/.ssh/digital_ocean_key root@JENKINS_ADDRESS
 
-# I had to instal docker-compose first.
+# I had to install docker-compose first.
+apt update
 apt install docker-compose-v2
 
-# I updated the "insecure-registries" line.
+# I updated the "insecure-registries" line and restarted docker.
 nano /etc/docker/daemon.json
 service docker restart
 docker info
 
-# MySQL related variables
+# Set MySQL related variables.
 export MYSQL_ROOT_PASSWORD=********
 export DB_USER=********
 export DB_PWD=********
 export DB_SERVER=mysql.db
 export DB_NAME=twn-db
 
-# Nexus related variables
+# Set Nexus related variables.
 export NEXUS_USER=********
 export NEXUS_PWD=********
 export NEXUS_ADDRESS=xxx.xxx.xxx.xxx:8082
 
+# Login and run.
 echo $NEXUS_PWD | docker login -u $NEXUS_USER --password-stdin $NEXUS_ADDRESS
 
 docker compose -f docker-compose.yaml up
 ```
+
+## Exercise 8
+
+**The inbound rules of my droplet:**
+
+![The phpmyadmin page.](Exercise-8-3-The-Inbound-Rules-of-my-Droplet-Firewall.jpg)
+
+**The running Java app from my droplet:**
+
+![The running java app.](Exercise-8-1-The-Running-Java-App.jpg)
+
+**The PhpMyAdmin from my droplet:**
+
+![The phpmyadmin page.](Exercise-8-2-The-PhpMyAdmin-Page.jpg)
